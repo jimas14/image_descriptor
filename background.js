@@ -1,25 +1,21 @@
-chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
-   if (info.status === 'complete') {
-       	//window.alert('yoyoyoyo\n');
+var allImages = [];
 
+chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
+   if (info.status === 'complete' && tab.active) {
        	console.log("yi4tiowefea");
 
-  		//var images = document.getElementsByTagName('img');
-  		var images = document.images;
-		console.log(images);
+		chrome.tabs.executeScript(tab.id,{file:"script.js"});
 
-		for(var i = 0; i < images.length ; i++) {
-		  // to open all photos in new tabs:
-		  // window.open(allImages[i].src, '_blank');
-		  images[i].src = 'url_to_cat_image';
-		}
+		chrome.runtime.onMessage.addListener(function(message){
 
-		// var images = [];
-		// for(var i = 0; i < document.images.length; i++){
-		//   images.push(document.images[i].src);
-		//   console.log(images);
-		// }
-		//chrome.runtime.sendMessage({method:"downloadImages",images:images});
+			//In case you want to do other things too this is a simple way to handle it
+			if(message.method == "downloadImages"){
+				message.images.forEach(function(v){
+				allImages.push(v);
+			});
+				console.log(allImages);
+			}
+		});
    }
 });
 // chrome.contextMenus.create({
@@ -38,18 +34,3 @@ chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
 // 	console.log(images);
 // 	chrome.runtime.sendMessage({method:"downloadImages",images:images});
 // }
-
-// 	).onLoad(function downloadImages(info,tab) {
-//   alert('o');
-//   chrome.tabs.executeScript(tab.id,{file:"script.js"});
-// }
-
-// chrome.runtime.onMessage.addListener(function(message){
-//   //In case you want to do other things too this is a simple way to handle it
-//   if(message.method == "downloadImages"){
-//     message.images.forEach(function(v){
-//       allImages.push(v);
-//     });
-//     alert(allImages[0]);
-//   }
-// });
